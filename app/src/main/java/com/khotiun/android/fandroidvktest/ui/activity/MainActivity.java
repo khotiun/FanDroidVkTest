@@ -1,4 +1,4 @@
-package com.khotiun.android.fandroidvktest;
+package com.khotiun.android.fandroidvktest.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.khotiun.android.fandroidvktest.CurrentUser;
+import com.khotiun.android.fandroidvktest.R;
 import com.khotiun.android.fandroidvktest.consts.ApiConstans;
 import com.khotiun.android.fandroidvktest.mvp.presenter.MainPresenter;
 import com.khotiun.android.fandroidvktest.mvp.view.MainView;
@@ -14,7 +16,7 @@ import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
-public class MainActivity extends MvpAppCompatActivity implements MainView{
+public class MainActivity extends BaseActivity implements MainView{
 
     //внедрение презентера
     @InjectPresenter
@@ -23,10 +25,13 @@ public class MainActivity extends MvpAppCompatActivity implements MainView{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         mPresenter.checkAuth();
+    }
 
+    @Override
+    protected int getMainContentLayout() {
+        return R.layout.activity_main;
     }
 
     @Override
