@@ -2,6 +2,7 @@ package com.khotiun.android.fandroidvktest.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -27,7 +28,7 @@ public class MainActivity extends BaseActivity implements MainView{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MyApplication.getApplicationComponent().inject(this);
-
+        Log.d("QQQQQ" , "onCreate");
         mPresenter.checkAuth();
     }
 
@@ -42,12 +43,14 @@ public class MainActivity extends BaseActivity implements MainView{
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken res) {
+                Log.d("QQQQQ" , "onResult");
             // Пользователь успешно авторизовался
                 mPresenter.checkAuth();
             }
             @Override
             public void onError(VKError error) {
             // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
+                Log.d("QQQQQ" , "onError");
             }
         })) {
             super.onActivityResult(requestCode, resultCode, data);

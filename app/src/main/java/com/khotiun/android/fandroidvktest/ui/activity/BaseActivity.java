@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 public abstract class BaseActivity extends MvpAppCompatActivity {
 
-    @Inject //Dagger будет брать инициализацию из manadger model
+    @Inject //Dagger будет брать инициализацию из manadger module
     MyFragmentManager mMyFragmentManager;
 
     @Override

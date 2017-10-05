@@ -2,8 +2,10 @@ package com.khotiun.android.fandroidvktest.di.component;
 
 import com.khotiun.android.fandroidvktest.di.module.ApplicationModule;
 import com.khotiun.android.fandroidvktest.di.module.ManagerModule;
+import com.khotiun.android.fandroidvktest.di.module.RestModule;
 import com.khotiun.android.fandroidvktest.ui.activity.BaseActivity;
 import com.khotiun.android.fandroidvktest.ui.activity.MainActivity;
+import com.khotiun.android.fandroidvktest.ui.fragment.NewsFeedFragment;
 
 
 import javax.inject.Singleton;
@@ -15,11 +17,15 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = {ApplicationModule.class, ManagerModule.class}) //связывает модули частямии, которые запрашивают зависимости, в данном случае один компонент отвечает за два модуля
+@Component(modules = {ApplicationModule.class, ManagerModule.class, RestModule.class}) //связывает модули частямии, которые запрашивают зависимости, в данном случае один компонент отвечает за два модуля
 public interface ApplicationComponent {
 
     //методы где будет использоваться внедрение
+    //activities
     void inject(BaseActivity activity);
     void inject(MainActivity activity);
+
+    //fragments
+    void inject(NewsFeedFragment fragment);
 
 }
