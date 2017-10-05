@@ -25,14 +25,22 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
+    //VK SDK
     compile 'com.vk:androidsdk:1.6.5'
     //Base modules integration Moxy
-    compile 'com.arello-mobile:moxy:1.5.3'
-    annotationProcessor 'com.arello-mobile:moxy-compiler:1.5.3'
     //For additional base view classes MvpActivity and MvpFragment
-    compile 'com.arello-mobile:moxy-android:1.5.3'
     //MvpAppCompatActivity
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.arello-mobile:moxy:1.5.3'
+    compile 'com.arello-mobile:moxy-android:1.5.3'
     compile 'com.arello-mobile:moxy-app-compat:1.5.3'
+
+    annotationProcessor 'com.arello-mobile:moxy-compiler:1.5.3'
+    //Dagger2
+    compile 'com.google.dagger:dagger:2.9'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
+    //JavaPoetявляется Java API для генерации .javaисходных файлов.
+    compile 'com.squareup:javapoet:1.9.0'
 }

@@ -3,12 +3,16 @@ package com.khotiun.android.fandroidvktest.ui.activity;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
+import com.khotiun.android.fandroidvktest.MyApplication;
 import com.khotiun.android.fandroidvktest.R;
 import com.khotiun.android.fandroidvktest.common.manager.MyFragmentManager;
 import com.khotiun.android.fandroidvktest.ui.fragment.BaseFragment;
+
+import javax.inject.Inject;
 
 /**
  * Created by hotun on 02.10.2017.
@@ -17,15 +21,15 @@ import com.khotiun.android.fandroidvktest.ui.fragment.BaseFragment;
 
 public abstract class BaseActivity extends MvpAppCompatActivity {
 
+    @Inject //Dagger будет брать инициализацию из manadger model
     MyFragmentManager mMyFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
+        MyApplication.getApplicationComponent().inject(this);
 
-        //через эту переменную получим доступ к добавлению и удалению фрагментов
-        mMyFragmentManager = new MyFragmentManager();
+        setContentView(R.layout.activity_base);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

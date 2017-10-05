@@ -4,13 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.khotiun.android.fandroidvktest.CurrentUser;
+import com.khotiun.android.fandroidvktest.MyApplication;
 import com.khotiun.android.fandroidvktest.R;
 import com.khotiun.android.fandroidvktest.consts.ApiConstans;
 import com.khotiun.android.fandroidvktest.mvp.presenter.MainPresenter;
 import com.khotiun.android.fandroidvktest.mvp.view.MainView;
+import com.khotiun.android.fandroidvktest.ui.fragment.NewsFeedFragment;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
@@ -25,6 +26,7 @@ public class MainActivity extends BaseActivity implements MainView{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyApplication.getApplicationComponent().inject(this);
 
         mPresenter.checkAuth();
     }
@@ -61,5 +63,6 @@ public class MainActivity extends BaseActivity implements MainView{
     @Override
     public void signedId() {
         Toast.makeText(this, "Current user id: " + CurrentUser.getId(), Toast.LENGTH_LONG).show();
+        setContent(new NewsFeedFragment());
     }
 }
