@@ -21,17 +21,17 @@ public class CurrentUser {
 
     //возвращает идентификатор текущего пользователя если токен получен
     public static String getId() {
-        if (VKAccessToken.currentToken() == null) {
-            return null;
+        if (VKAccessToken.currentToken() != null) {
+            return VKAccessToken.currentToken().userId;
         }
 
-        return VKAccessToken.currentToken().userId;
+        return null;
     }
 
     //если пользователь авторизован, если пользовательский токен не равен нулл и не устарел
     public static boolean isAuthorized() {
         return VKSdk.isLoggedIn()
                 && VKAccessToken.currentToken() != null
-                && VKAccessToken.currentToken().isExpired();
+                && !VKAccessToken.currentToken().isExpired();
     }
 }
