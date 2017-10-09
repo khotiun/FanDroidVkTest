@@ -1,11 +1,16 @@
 
 package com.khotiun.android.fandroidvktest.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class WallItem {
+
+    //информация об отправители
+    private String senderName;
+    private String senderPhoto;
 
     @SerializedName("id")
     @Expose
@@ -34,6 +39,9 @@ public class WallItem {
     @SerializedName("attachments")
     @Expose
     private List<Attachment> attachments = null;
+    @SerializedName("copy_history")
+    @Expose
+    private List<WallItem> copyHistory = new ArrayList<>();
     @SerializedName("post_source")
     @Expose
     private PostSource postSource;
@@ -162,4 +170,32 @@ public class WallItem {
         this.views = views;
     }
 
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public String getSenderPhoto() {
+        return senderPhoto;
+    }
+
+    public void setSenderPhoto(String senderPhoto) {
+        this.senderPhoto = senderPhoto;
+    }
+
+    //проверка содержит ли запись репост
+    public boolean haveSharedRepost() {
+        return copyHistory.size() > 0;
+    }
+
+    //метод для получения репоста
+    public WallItem getSharedRepost() {
+        if (haveSharedRepost()) {
+            return copyHistory.get(0);
+        }
+        return null;
+    }
 }

@@ -4,16 +4,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.khotiun.android.fandroidvktest.CurrentUser;
 import com.khotiun.android.fandroidvktest.MyApplication;
 import com.khotiun.android.fandroidvktest.R;
 import com.khotiun.android.fandroidvktest.common.BaseAdapter;
+import com.khotiun.android.fandroidvktest.common.utils.VkListHelper;
 import com.khotiun.android.fandroidvktest.model.WallItem;
-import com.khotiun.android.fandroidvktest.model.view.NewsFeedItemBodyViewModel;
+import com.khotiun.android.fandroidvktest.model.view.BaseViewModel;
+import com.khotiun.android.fandroidvktest.model.view.NewsItemBodyViewModel;
+import com.khotiun.android.fandroidvktest.model.view.NewsItemHeaderViewModel;
 import com.khotiun.android.fandroidvktest.rest.api.WallApi;
 import com.khotiun.android.fandroidvktest.rest.model.request.WallGetRequestModel;
 import com.khotiun.android.fandroidvktest.rest.model.response.WallGetResponse;
@@ -56,9 +57,12 @@ public class NewsFeedFragment extends BaseFragment {
         mWallApi.get(new WallGetRequestModel(-86529522).toMap()).enqueue(new Callback<WallGetResponse>() {
             @Override
             public void onResponse(Call<WallGetResponse> call, Response<WallGetResponse> response) {
-                List<NewsFeedItemBodyViewModel> list = new ArrayList<NewsFeedItemBodyViewModel>();
-                for (WallItem item : response.body().response.getItems()) {
-                    list.add(new NewsFeedItemBodyViewModel(item));
+                List<WallItem> wallItems = VkListHelper.getWallList(response.body().response);
+                List<BaseViewModel> list = new ArrayList<>();
+
+                for (WallItem item : wallItems) {
+                    list.add(new NewsItemHeaderViewModel(item));
+                    list.add(new NewsItemBodyViewModel(item));
                 }
 
                 mBaseAdapter.addItems(list);

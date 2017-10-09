@@ -4,13 +4,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.khotiun.android.fandroidvktest.R;
-import com.khotiun.android.fandroidvktest.model.view.NewsFeedItemBodyViewModel;
+import com.khotiun.android.fandroidvktest.model.view.NewsItemBodyViewModel;
 
 /**
  * Created by hotun on 08.10.2017.
  */
 
-public class NewsItemBodyHolder extends BaseViewHolder<NewsFeedItemBodyViewModel>{
+public class NewsItemBodyHolder extends BaseViewHolder<NewsItemBodyViewModel>{
 
     public TextView mText;
 
@@ -21,8 +21,8 @@ public class NewsItemBodyHolder extends BaseViewHolder<NewsFeedItemBodyViewModel
     }
 
     @Override
-    public void bindViewHolder(NewsFeedItemBodyViewModel newsFeedItemBodyViewModel) {
-        mText.setText(newsFeedItemBodyViewModel.getText());
+    public void bindViewHolder(NewsItemBodyViewModel newsItemBodyViewModel) {
+        mText.setText(newsItemBodyViewModel.getText());
     }
 
     @Override

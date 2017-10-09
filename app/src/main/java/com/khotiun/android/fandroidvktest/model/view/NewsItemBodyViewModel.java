@@ -10,12 +10,12 @@ import com.khotiun.android.fandroidvktest.ui.holder.NewsItemBodyHolder;
  * Created by hotun on 08.10.2017.
  */
 
-public class NewsFeedItemBodyViewModel extends BaseViewModel {
+public class NewsItemBodyViewModel extends BaseViewModel {
 
     private int mId;
     private String mText;
 
-    public NewsFeedItemBodyViewModel(WallItem wallItem) {
+    public NewsItemBodyViewModel(WallItem wallItem) {
         this.mId = wallItem.getId();
         this.mText = wallItem.getText();
     }
