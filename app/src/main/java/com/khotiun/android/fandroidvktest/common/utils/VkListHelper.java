@@ -21,10 +21,17 @@ public class VkListHelper {
             wallItem.setSenderName(sender.getFullName());
             wallItem.setSenderPhoto(sender.getPhoto());
 
+            //для присвоения значения переменной атечментстринг с конвертированых атачментов для записи и ее репоста
+            wallItem.setAttachmentsString(Utils.convertAttachmentsToFrontIcons(wallItem.getAttachments()));
+
             if (wallItem.haveSharedRepost()) {
                 Owner repostSender = response.getSender(wallItem.getSharedRepost().getFromId());
                 wallItem.getSharedRepost().setSenderName(repostSender.getFullName());
                 wallItem.getSharedRepost().setSenderPhoto(repostSender.getPhoto());
+
+                wallItem.getSharedRepost().setAttachmentsString(Utils.convertAttachmentsToFrontIcons(
+                        wallItem.getSharedRepost().getAttachments()
+                ));
             }
         }
         return wallItems;

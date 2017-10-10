@@ -1,10 +1,14 @@
 package com.khotiun.android.fandroidvktest.ui.holder;
 
+import android.graphics.Typeface;
 import android.view.View;
 import android.widget.TextView;
 
+import com.khotiun.android.fandroidvktest.MyApplication;
 import com.khotiun.android.fandroidvktest.R;
 import com.khotiun.android.fandroidvktest.model.view.NewsItemBodyViewModel;
+
+import javax.inject.Inject;
 
 /**
  * Created by hotun on 08.10.2017.
@@ -12,21 +16,33 @@ import com.khotiun.android.fandroidvktest.model.view.NewsItemBodyViewModel;
 
 public class NewsItemBodyHolder extends BaseViewHolder<NewsItemBodyViewModel>{
 
-    public TextView mText;
+    private TextView tvText;
+    private TextView tvAttachments;
+
+    @Inject
+    protected Typeface mFontGoogle;
 
     public NewsItemBodyHolder(View itemView) {
         super(itemView);
+        MyApplication.getApplicationComponent().inject(this);
 
-        mText = (TextView) itemView.findViewById(R.id.tv_text);
+        tvText = (TextView) itemView.findViewById(R.id.tv_text);
+        tvAttachments = (TextView) itemView.findViewById(R.id.tv_attachments);
+
+        if (tvAttachments != null) {
+            tvAttachments.setTypeface(mFontGoogle);
+        }
     }
 
     @Override
-    public void bindViewHolder(NewsItemBodyViewModel newsItemBodyViewModel) {
-        mText.setText(newsItemBodyViewModel.getText());
+    public void bindViewHolder(NewsItemBodyViewModel item) {
+        tvText.setText(item.getText());
+        tvAttachments.setText(item.getAttachmentString());
     }
 
     @Override
     public void unbindViewHolder() {
-        mText.setText(null);
+        tvText.setText(null);
+        tvAttachments.setText(null);
     }
 }
