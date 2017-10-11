@@ -3,7 +3,6 @@ package com.khotiun.android.fandroidvktest.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.khotiun.android.fandroidvktest.MyApplication;
 import com.khotiun.android.fandroidvktest.R;
@@ -22,9 +21,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by hotun on 07.10.2017.
@@ -55,27 +57,37 @@ public class NewsFeedFragment extends BaseFeedFragment {
         super.onActivityCreated(savedInstanceState);
 
         Log.d(TAG, "onActivityCreated");
-        mWallApi.get(new WallGetRequestModel(-86529522).toMap()).enqueue(new Callback<WallGetResponse>() {
+        //flatMap - принимает данные излучамые одним Observable, возвращает данные излучаемые другим Observable
+        //в данном случае принимает WallGetResponse, возвращает WallItem
+        mWallApi.get(new WallGetRequestModel(-86529522).toMap()).flatMap(new Function<WallGetResponse, ObservableSource<WallItem>>() {
             @Override
-            public void onResponse(Call<WallGetResponse> call, Response<WallGetResponse> response) {
-                List<WallItem> wallItems = VkListHelper.getWallList(response.body().response);
-                List<BaseViewModel> list = new ArrayList<>();
-                Log.d(TAG, "onResponse");
-                for (WallItem item : wallItems) {
-                    list.add(new NewsItemHeaderViewModel(item));
-                    list.add(new NewsItemBodyViewModel(item));
-                    list.add(new NewsItemFooterViewModel(item));
-                }
-
-                mAdapter.addItems(list);
-                Toast.makeText(getActivity(), "Likes: " + response.body().response.getItems().get(0).getLikes().getCount(), Toast.LENGTH_LONG).show();
+            public ObservableSource<WallItem> apply(@NonNull WallGetResponse wallGetResponse) throws Exception {
+                return io.reactivex.Observable.fromIterable(VkListHelper.getWallList(wallGetResponse.response));
             }
+        })
+                //в данном случае принимает WallItem, возвращает BaseViewModel
+                .flatMap(new Function<WallItem, ObservableSource<BaseViewModel>>() {
+                    @Override
+                    public ObservableSource<BaseViewModel> apply(@NonNull WallItem wallItem) throws Exception {
+                        List<BaseViewModel> baseItems = new ArrayList<>();
+                        baseItems.add(new NewsItemHeaderViewModel(wallItem));
+                        baseItems.add(new NewsItemBodyViewModel(wallItem));
+                        baseItems.add(new NewsItemFooterViewModel(wallItem));
 
-            @Override
-            public void onFailure(Call<WallGetResponse> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+                        return io.reactivex.Observable.fromIterable(baseItems);
+                    }
+                })
+                .toList()//преобразовывает все элементы излучаемые rx цепочкой в Observable - который излучает единственный элемент список из этих элементов
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<BaseViewModel>>() {
+                    @Override
+                    public void accept(List<BaseViewModel> objects) throws Exception {
+                        mAdapter.addItems(objects);
+                    }
+                });
+
+
 
     }
 
