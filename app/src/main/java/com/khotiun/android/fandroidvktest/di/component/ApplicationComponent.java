@@ -7,7 +7,7 @@ import com.khotiun.android.fandroidvktest.ui.activity.BaseActivity;
 import com.khotiun.android.fandroidvktest.ui.activity.MainActivity;
 import com.khotiun.android.fandroidvktest.ui.fragment.NewsFeedFragment;
 import com.khotiun.android.fandroidvktest.ui.holder.NewsItemBodyHolder;
-
+import com.khotiun.android.fandroidvktest.ui.holder.NewsItemFooterHolder;
 
 import javax.inject.Singleton;
 
@@ -30,5 +30,6 @@ public interface ApplicationComponent {
     void inject(NewsFeedFragment fragment);
     //holders
     void inject(NewsItemBodyHolder holder);
+    void inject(NewsItemFooterHolder holder);
 
 }

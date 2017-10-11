@@ -14,6 +14,7 @@ import com.khotiun.android.fandroidvktest.common.utils.VkListHelper;
 import com.khotiun.android.fandroidvktest.model.WallItem;
 import com.khotiun.android.fandroidvktest.model.view.BaseViewModel;
 import com.khotiun.android.fandroidvktest.model.view.NewsItemBodyViewModel;
+import com.khotiun.android.fandroidvktest.model.view.NewsItemFooterViewModel;
 import com.khotiun.android.fandroidvktest.model.view.NewsItemHeaderViewModel;
 import com.khotiun.android.fandroidvktest.rest.api.WallApi;
 import com.khotiun.android.fandroidvktest.rest.model.request.WallGetRequestModel;
@@ -63,6 +64,7 @@ public class NewsFeedFragment extends BaseFragment {
                 for (WallItem item : wallItems) {
                     list.add(new NewsItemHeaderViewModel(item));
                     list.add(new NewsItemBodyViewModel(item));
+                    list.add(new NewsItemFooterViewModel(item));
                 }
 
                 mBaseAdapter.addItems(list);
