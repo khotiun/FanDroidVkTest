@@ -7,25 +7,20 @@ import android.util.Log;
 import com.khotiun.android.fandroidvktest.MyApplication;
 import com.khotiun.android.fandroidvktest.R;
 import com.khotiun.android.fandroidvktest.common.utils.VkListHelper;
-import com.khotiun.android.fandroidvktest.model.WallItem;
 import com.khotiun.android.fandroidvktest.model.view.BaseViewModel;
 import com.khotiun.android.fandroidvktest.model.view.NewsItemBodyViewModel;
 import com.khotiun.android.fandroidvktest.model.view.NewsItemFooterViewModel;
 import com.khotiun.android.fandroidvktest.model.view.NewsItemHeaderViewModel;
 import com.khotiun.android.fandroidvktest.rest.api.WallApi;
 import com.khotiun.android.fandroidvktest.rest.model.request.WallGetRequestModel;
-import com.khotiun.android.fandroidvktest.rest.model.response.WallGetResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.ObservableSource;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -59,33 +54,20 @@ public class NewsFeedFragment extends BaseFeedFragment {
         Log.d(TAG, "onActivityCreated");
         //flatMap - принимает данные излучамые одним Observable, возвращает данные излучаемые другим Observable
         //в данном случае принимает WallGetResponse, возвращает WallItem
-        mWallApi.get(new WallGetRequestModel(-86529522).toMap()).flatMap(new Function<WallGetResponse, ObservableSource<WallItem>>() {
-            @Override
-            public ObservableSource<WallItem> apply(@NonNull WallGetResponse wallGetResponse) throws Exception {
-                return io.reactivex.Observable.fromIterable(VkListHelper.getWallList(wallGetResponse.response));
-            }
-        })
-                //в данном случае принимает WallItem, возвращает BaseViewModel
-                .flatMap(new Function<WallItem, ObservableSource<BaseViewModel>>() {
-                    @Override
-                    public ObservableSource<BaseViewModel> apply(@NonNull WallItem wallItem) throws Exception {
-                        List<BaseViewModel> baseItems = new ArrayList<>();
-                        baseItems.add(new NewsItemHeaderViewModel(wallItem));
-                        baseItems.add(new NewsItemBodyViewModel(wallItem));
-                        baseItems.add(new NewsItemFooterViewModel(wallItem));
-
-                        return io.reactivex.Observable.fromIterable(baseItems);
-                    }
+        mWallApi.get(new WallGetRequestModel(-86529522).toMap())
+                .flatMap(full -> Observable.fromIterable(VkListHelper.getWallList(full.response)))
+                .flatMap(wallItem -> {
+                    List<BaseViewModel> baseItems = new ArrayList<>();
+                    baseItems.add(new NewsItemHeaderViewModel(wallItem));
+                    baseItems.add(new NewsItemBodyViewModel(wallItem));
+                    baseItems.add(new NewsItemFooterViewModel(wallItem));
+                    return Observable.fromIterable(baseItems);
                 })
                 .toList()//преобразовывает все элементы излучаемые rx цепочкой в Observable - который излучает единственный элемент список из этих элементов
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<BaseViewModel>>() {
-                    @Override
-                    public void accept(List<BaseViewModel> objects) throws Exception {
-                        mAdapter.addItems(objects);
-                    }
-                });
+                //передаем BaseViewModel, а возвращаем <List<BaseViewModel>>, для того что бы подавать элементы в адаптер парционно на каждую загрузку новый список
+                .subscribeOn(Schedulers.io())//поток в котором будет выполняться процесс Observable (в нашем случае все преобразования данных)
+                .observeOn(AndroidSchedulers.mainThread())//поток в котором будут выполняться все последующие операции над излученными данными переданными в этот метод
+                .subscribe(objects -> mAdapter.addItems(objects));
 
 
 
