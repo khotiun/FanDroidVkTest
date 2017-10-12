@@ -64,4 +64,9 @@ public class NewsItemHeaderViewModel extends BaseViewModel {
     public String getRepostProfileName() {
         return mRepostProfileName;
     }
+
+    @Override
+    public boolean isItemDecorator() {
+        return true;
+    }
 }

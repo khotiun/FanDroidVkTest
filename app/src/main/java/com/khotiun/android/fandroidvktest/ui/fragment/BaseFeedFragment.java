@@ -3,14 +3,15 @@ package com.khotiun.android.fandroidvktest.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.khotiun.android.fandroidvktest.R;
 import com.khotiun.android.fandroidvktest.common.BaseAdapter;
+import com.khotiun.android.fandroidvktest.common.manager.MyLinearLayoutManager;
 import com.khotiun.android.fandroidvktest.model.view.BaseViewModel;
 import com.khotiun.android.fandroidvktest.mvp.presenter.BaseFeedPresenter;
 import com.khotiun.android.fandroidvktest.mvp.view.BaseFeedView;
@@ -48,7 +49,22 @@ public abstract class BaseFeedFragment extends BaseFragment implements BaseFeedV
     //для инициализации ресайкл вью и адаптера
     private void setUpRecyclerView(View rootView) {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //кастомный лайоатменеджер, который проверяет нужно ли загружать новые элементы
+        MyLinearLayoutManager myLinearLayoutManager = new MyLinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(myLinearLayoutManager);
+
+        //слушает список и оповищает когда он скролица
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+              if (myLinearLayoutManager.isOnnextPagePosition()) {
+                  mBaseFeedPresenter.loadNext(mAdapter.getRealItemCount());
+              }
+            }
+        });
+
+        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
     }
 
     //для инициализации адаптера и присваивании его RecycleView

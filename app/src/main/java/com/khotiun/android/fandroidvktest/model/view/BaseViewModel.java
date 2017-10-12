@@ -44,4 +44,8 @@ public abstract class BaseViewModel {
         }
     }
 
+    //нужно переопределить в тех моделях которые не будем считать реальными
+    public boolean isItemDecorator() {
+        return false;
+    }
 }
