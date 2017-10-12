@@ -2,9 +2,11 @@ package com.khotiun.android.fandroidvktest.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.khotiun.android.fandroidvktest.R;
 import com.khotiun.android.fandroidvktest.common.BaseAdapter;
@@ -19,10 +21,14 @@ public class BaseFeedFragment extends BaseFragment {
 
     BaseAdapter mAdapter;
 
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
+    protected ProgressBar mProgressBar;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setUpSwipeToRefreshLayout(view);
         setUpRecyclerView(view);
         setUpAdapter(mRecyclerView);
     }
@@ -37,6 +43,12 @@ public class BaseFeedFragment extends BaseFragment {
     private void setUpAdapter(RecyclerView recyclerView) {
         mAdapter = new BaseAdapter();
         recyclerView.setAdapter(mAdapter);
+    }
+
+    private void setUpSwipeToRefreshLayout (View rootView) {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        mProgressBar = getBaseActivity().getProgressBar();
     }
 
     @Override

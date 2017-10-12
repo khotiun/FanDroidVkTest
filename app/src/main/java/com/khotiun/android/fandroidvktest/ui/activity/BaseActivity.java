@@ -3,8 +3,8 @@ package com.khotiun.android.fandroidvktest.ui.activity;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.khotiun.android.fandroidvktest.MyApplication;
@@ -21,21 +21,30 @@ import javax.inject.Inject;
 
 public abstract class BaseActivity extends MvpAppCompatActivity {
 
+    protected ProgressBar mProgressBar;
+
     @Inject //Dagger будет брать инициализацию из manadger module
     MyFragmentManager mMyFragmentManager;
+
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyApplication.getApplicationComponent().inject(this);
-
         setContentView(R.layout.activity_base);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        MyApplication.getApplicationComponent().inject(this);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FrameLayout parent = (FrameLayout) findViewById(R.id.main_wrapper);
         getLayoutInflater().inflate(getMainContentLayout(), parent);
+    }
+
+    public ProgressBar getProgressBar() {
+        return mProgressBar;
     }
 
     //@LayoutRes - предпологает что метод будет возвращать id layout
