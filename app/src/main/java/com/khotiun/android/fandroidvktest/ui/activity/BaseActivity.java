@@ -21,12 +21,12 @@ import javax.inject.Inject;
 
 public abstract class BaseActivity extends MvpAppCompatActivity {
 
-    protected ProgressBar mProgressBar;
-
     @Inject //Dagger будет брать инициализацию из manadger module
     MyFragmentManager mMyFragmentManager;
 
     Toolbar toolbar;
+
+    protected ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +35,10 @@ public abstract class BaseActivity extends MvpAppCompatActivity {
 
         MyApplication.getApplicationComponent().inject(this);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progress);
 
         FrameLayout parent = (FrameLayout) findViewById(R.id.main_wrapper);
         getLayoutInflater().inflate(getMainContentLayout(), parent);

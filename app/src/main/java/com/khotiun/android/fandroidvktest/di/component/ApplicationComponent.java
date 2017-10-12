@@ -3,6 +3,7 @@ package com.khotiun.android.fandroidvktest.di.component;
 import com.khotiun.android.fandroidvktest.di.module.ApplicationModule;
 import com.khotiun.android.fandroidvktest.di.module.ManagerModule;
 import com.khotiun.android.fandroidvktest.di.module.RestModule;
+import com.khotiun.android.fandroidvktest.mvp.presenter.NewsFeedPresenter;
 import com.khotiun.android.fandroidvktest.ui.activity.BaseActivity;
 import com.khotiun.android.fandroidvktest.ui.activity.MainActivity;
 import com.khotiun.android.fandroidvktest.ui.fragment.NewsFeedFragment;
@@ -31,5 +32,8 @@ public interface ApplicationComponent {
     //holders
     void inject(NewsItemBodyHolder holder);
     void inject(NewsItemFooterHolder holder);
+
+    //presenters
+    void inject(NewsFeedPresenter presenter);
 
 }
